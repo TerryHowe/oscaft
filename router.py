@@ -36,6 +36,20 @@ def main():
         child.sendline("router list -f csv -c id -c name")
         child.expect("\"" + id + "\",\"lucky\"")
         child.expect(prompt)
+#
+# Need to make some tools to make this stuff more reliable
+#
+#        child.sendline('network show oscaft -f shell -c subnets')
+#        i = child.expect('subnets="(.*)"')
+#        subid = child.match.group(1)
+#        child.sendline("router add interface lucky subnet=" + subid)
+#        child.expect('Added interface ' + subid + 'to router lucky.')
+#        child.expect(prompt)
+#        child.sendline("router remove interface lucky subnet=" + subid)
+#        child.expect('Removed interface from router lucky.')
+#        child.expect(prompt)
+        child.sendline("subnet delete subby")
+        child.expect(prompt)
         child.sendline("router delete lucky")
         child.expect('Deleted router: lucky')
         child.expect(prompt)
