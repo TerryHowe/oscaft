@@ -16,7 +16,7 @@
 import httpretty
 
 from openstackclient.network.v2_0 import security_group_rule
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.oscaft import common
 
 
 class TestSecurityGroupRuleIntegration(common.TestIntegrationBase):
@@ -29,12 +29,12 @@ class TestSecurityGroupRuleIntegration(common.TestIntegrationBase):
    "security_group_rule":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "direction": "ingress",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
 }"""
-    DELETE_URL = HOSTESS + "/security-group-rules/gator.json"
+    DELETE_URL = HOSTESS + "/security-group-rules/a9254bdb.json"
     DELETE = "{}"
     LIST_URL = HOSTESS + "/security-group-rules.json"
     LIST_ONE = '{ "security_group_rules": [{ "id": "a9254bdb" }] }'
@@ -61,13 +61,12 @@ class TestSecurityGroupRuleIntegration(common.TestIntegrationBase):
        }
    ]
 }"""
-    SHOW_URL = HOSTESS + "/security-group-rules/gator.json"
+    SHOW_URL = HOSTESS + "/security-group-rules/a9254bdb.json"
     SHOW = CREATE
 
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
         pargs.security_group_id = 'sg1'
         pargs.direction = 'ingress'
         pargs.ethertype = 'IPv4'
@@ -86,7 +85,7 @@ class TestSecurityGroupRuleIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new security_group_rule:
 id="a9254bdb"
-name="gator"
+direction="ingress"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -94,14 +93,14 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.identifier = 'a9254bdb'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(security_group_rule.DeleteSecurityGroupRule, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted security_group_rule: gator\n',
+        self.assertEqual(u'Deleted security_group_rule: a9254bdb\n',
                          self.stdout())
 
     @httpretty.activate
@@ -122,16 +121,14 @@ a9254bdb,55555555,ingress,UDP,10.0.0.0/24,
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
-        httpretty.register_uri(httpretty.GET, self.LIST_URL,
-                               body=self.LIST_ONE)
+        pargs.identifier = 'a9254bdb'
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
                                body=self.SHOW)
         self.when_run(security_group_rule.ShowSecurityGroupRule, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+direction="ingress"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())

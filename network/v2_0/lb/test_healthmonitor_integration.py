@@ -16,7 +16,7 @@
 import httpretty
 
 from openstackclient.network.v2_0.lb import healthmonitor
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.oscaft import common
 
 
 class TestHealthMonitorIntegration(common.TestIntegrationBase):
@@ -59,6 +59,8 @@ class TestHealthMonitorIntegration(common.TestIntegrationBase):
        }
    ]
 }"""
+    SET_URL = HOSTESS + "/lb/health_monitors/a9254bdb.json"
+    SET = CREATE
     SHOW_URL = HOSTESS + "/lb/health_monitors/a9254bdb.json"
     SHOW = CREATE
 
@@ -89,7 +91,7 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'nameo'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
@@ -119,9 +121,11 @@ b8408dgd,HTTP,False
     @httpretty.activate
     def test_set(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'nameo'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
+        httpretty.register_uri(httpretty.PUT, self.SET_URL,
+                               body=self.SET)
         self.when_run(healthmonitor.SetHealthMonitor, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual('', self.stdout())
@@ -129,7 +133,7 @@ b8408dgd,HTTP,False
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'nameo'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,

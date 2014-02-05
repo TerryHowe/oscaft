@@ -16,7 +16,7 @@
 import httpretty
 
 from openstackclient.network.v2_0 import floatingip
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.oscaft import common
 
 
 class TestFloatingIpIntegration(common.TestIntegrationBase):
@@ -85,7 +85,7 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.identifier = 'gator'
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(floatingip.DeleteFloatingIp, pargs)
@@ -110,7 +110,7 @@ b8408dgd,10.1.1.2,15.1.1.3,8080808
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.id = 'gator'
+        pargs.identifier = 'gator'
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
                                body=self.SHOW)
         self.when_run(floatingip.ShowFloatingIp, pargs)

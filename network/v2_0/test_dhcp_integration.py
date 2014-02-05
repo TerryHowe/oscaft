@@ -16,7 +16,7 @@
 import httpretty
 
 from openstackclient.network.v2_0 import dhcp
-from openstackclient.tests.network.v2_0 import common
+from openstackclient.tests.oscaft import common
 
 
 class TestGatewayIntegration(common.TestIntegrationBase):
