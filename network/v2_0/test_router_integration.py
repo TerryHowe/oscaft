@@ -131,19 +131,19 @@ a9254bdb,rooty
 b8408dgd,croc
 """, self.stdout())
 
-    @httpretty.activate
-    def test_list_l3(self):
-        pargs = common.FakeParsedArgs()
-        pargs.formatter = 'csv'
-        pargs.l3_agent = 'elthree'
-        httpretty.register_uri(httpretty.GET, self.LIST_L3_URL,
-                               body=self.LIST_L3)
-        self.when_run(router.ListRouter, pargs)
-        self.assertEqual('', self.stderr())
-        self.assertEqual("""\
-id,name,external_gateway_info
-8eef2388,rooty,{}
-""", self.stdout())
+    #@httpretty.activate
+    #def test_list_l3(self):
+    #    pargs = common.FakeParsedArgs()
+    #    pargs.formatter = 'csv'
+    #    pargs.l3_agent = 'elthree'
+    #    httpretty.register_uri(httpretty.GET, self.LIST_L3_URL,
+    #                           body=self.LIST_L3)
+    #    self.when_run(router.ListRouter, pargs)
+    #    self.assertEqual('', self.stderr())
+    #    self.assertEqual("""\
+#id,name,external_gateway_info
+#8eef2388,rooty,{}
+#""", self.stdout())
 
     @httpretty.activate
     def test_set(self):
@@ -157,7 +157,7 @@ id,name,external_gateway_info
                                body=self.SET)
         self.when_run(router.SetRouter, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Removed gateway from router 88888823\n',
+        self.assertEqual(u'Updated router: rooty\n',
                          self.stdout())
 
     @httpretty.activate

@@ -84,8 +84,8 @@ class TestSecurityGroupRuleIntegration(common.TestIntegrationBase):
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 Created a new security_group_rule:
-id="a9254bdb"
 direction="ingress"
+id="a9254bdb"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -127,8 +127,8 @@ a9254bdb,55555555,ingress,UDP,10.0.0.0/24,
         self.when_run(security_group_rule.ShowSecurityGroupRule, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
-id="a9254bdb"
 direction="ingress"
+id="a9254bdb"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())

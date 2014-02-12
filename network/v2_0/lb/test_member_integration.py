@@ -125,7 +125,7 @@ b8408dgd,ACTIVE
                                body=self.SET)
         self.when_run(member.SetMember, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated member: nameo\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

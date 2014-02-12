@@ -128,7 +128,7 @@ b8408dgd,croc,ACTIVE
                                body=self.SET)
         self.when_run(service.SetService, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated vpnservice: gator\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

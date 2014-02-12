@@ -74,7 +74,7 @@ class TestGatewayIntegration(common.TestIntegrationBase):
         self.when_run(gateway.CreateGateway, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
-Created a new network_gateway:
+Created a new gateway:
 id="a9254bdb"
 name="gator"
 status="ACTIVE"
@@ -91,7 +91,7 @@ tenant_id="33a40233"
                                body=self.DELETE)
         self.when_run(gateway.DeleteGateway, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted network_gateway: gator\n',
+        self.assertEqual(u'Deleted gateway: gator\n',
                          self.stdout())
 
     @httpretty.activate
@@ -118,7 +118,7 @@ b8408dgd,croc
                                body=self.SET)
         self.when_run(gateway.SetGateway, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated gateway: gator\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

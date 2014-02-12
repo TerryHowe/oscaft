@@ -128,7 +128,7 @@ b8408dgd,HTTP,False
                                body=self.SET)
         self.when_run(healthmonitor.SetHealthMonitor, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated health_monitor: nameo\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

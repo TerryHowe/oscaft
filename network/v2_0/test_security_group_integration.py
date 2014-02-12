@@ -113,9 +113,9 @@ b8408dgd,croc
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.PUT, self.SET_URL,
                                body=self.SET)
-        self.when_run(router.SetRouter, pargs)
+        self.when_run(security_group.SetSecurityGroup, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Removed gateway from router 88888823\n',
+        self.assertEqual('Updated security_group: gator\n',
                          self.stdout())
 
     @httpretty.activate

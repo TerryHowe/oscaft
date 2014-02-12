@@ -129,7 +129,7 @@ b8408dgd,croc,sha1,aes-128,group5
                                body=self.SET)
         self.when_run(ipsecpolicy.SetIpsecpolicy, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated ipsecpolicy: gator\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

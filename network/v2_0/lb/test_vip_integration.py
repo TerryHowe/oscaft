@@ -133,7 +133,7 @@ b8408dgd,croc,ACTIVE
                                body=self.SET)
         self.when_run(vip.SetVip, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated vip: nameo\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):

@@ -125,7 +125,7 @@ b8408dgd,croc
                                body=self.SET)
         self.when_run(subnet.SetSubnet, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('', self.stdout())
+        self.assertEqual('Updated subnet: gator\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):
