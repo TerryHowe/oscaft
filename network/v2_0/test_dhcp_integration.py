@@ -29,7 +29,7 @@ class TestGatewayIntegration(common.TestIntegrationBase):
    "agent":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "nameo",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
@@ -42,7 +42,7 @@ class TestGatewayIntegration(common.TestIntegrationBase):
    "agents": [
        {
           "status": "ACTIVE",
-          "host": "gator",
+          "host": "nameo",
           "tenant_id": "33a40233",
           "admin_state_up": "true",
           "alive": false,
@@ -100,6 +100,6 @@ class TestGatewayIntegration(common.TestIntegrationBase):
         #self.assertEqual('', self.stderr())
         #self.assertEqual("""\
 #id,host,admin_state_up,alive
-#a9254bdb,gator,true,xxx
+#a9254bdb,nameo,true,xxx
 #b8408dgd,croc,true,:-)
 #""", self.stdout())

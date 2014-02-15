@@ -27,7 +27,7 @@ class TestSecurityGroupIntegration(common.TestIntegrationBase):
    "security_group":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "nameo",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
@@ -41,7 +41,7 @@ class TestSecurityGroupIntegration(common.TestIntegrationBase):
    "security_groups": [
        {
           "status": "ACTIVE",
-          "name": "gator",
+          "name": "nameo",
           "tenant_id": "33a40233",
           "id": "a9254bdb"
        },
@@ -61,7 +61,7 @@ class TestSecurityGroupIntegration(common.TestIntegrationBase):
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'nameo'
         pargs.description = 'groupo'
         pargs.tenant_id = '33a40233'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
@@ -73,7 +73,7 @@ class TestSecurityGroupIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new security_group:
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -81,14 +81,14 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(security_group.DeleteSecurityGroup, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted security_group: gator\n',
+        self.assertEqual(u'Deleted security_group: nameo\n',
                          self.stdout())
 
     @httpretty.activate
@@ -101,21 +101,21 @@ tenant_id="33a40233"
         self.assertEqual('', self.stderr())
         self.assertEqual("""\
 id,name
-a9254bdb,gator
+a9254bdb,nameo
 b8408dgd,croc
 """, self.stdout())
 
     @httpretty.activate
     def test_set(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.PUT, self.SET_URL,
                                body=self.SET)
         self.when_run(security_group.SetSecurityGroup, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('Updated security_group: gator\n',
+        self.assertEqual('Updated security_group: nameo\n',
                          self.stdout())
 
     @httpretty.activate
@@ -131,7 +131,7 @@ b8408dgd,croc
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
@@ -140,7 +140,7 @@ b8408dgd,croc
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())

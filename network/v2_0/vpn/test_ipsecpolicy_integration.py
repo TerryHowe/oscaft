@@ -27,7 +27,7 @@ class TestIpsecpolicyIntegration(common.TestIntegrationBase):
    "ipsecpolicy":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "nameo",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
@@ -45,7 +45,7 @@ class TestIpsecpolicyIntegration(common.TestIntegrationBase):
 {
    "ipsecpolicies": [
        {
-          "name": "gator",
+          "name": "nameo",
           "tenant_id": "33a40233",
           "auth_algorithm": "sha1",
           "encryption_algorithm": "aes-128",
@@ -71,8 +71,8 @@ class TestIpsecpolicyIntegration(common.TestIntegrationBase):
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
-        pargs.description = 'gatorific'
+        pargs.name = 'nameo'
+        pargs.description = 'nameoific'
         pargs.transform_protocol = 'esp'
         pargs.auth_algorithm = 'sha1'
         pargs.encryption_algorithm = 'aes-128'
@@ -87,7 +87,7 @@ class TestIpsecpolicyIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new ipsecpolicy:
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -95,14 +95,14 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(ipsecpolicy.DeleteIpsecpolicy, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted ipsecpolicy: gator\n',
+        self.assertEqual(u'Deleted ipsecpolicy: nameo\n',
                          self.stdout())
 
     @httpretty.activate
@@ -115,26 +115,26 @@ tenant_id="33a40233"
         self.assertEqual('', self.stderr())
         self.assertEqual("""\
 id,name,auth_algorithm,encryption_algorithm,pfs
-a9254bdb,gator,sha1,aes-128,group5
+a9254bdb,nameo,sha1,aes-128,group5
 b8408dgd,croc,sha1,aes-128,group5
 """, self.stdout())
 
     @httpretty.activate
     def test_set(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.PUT, self.SET_URL,
                                body=self.SET)
         self.when_run(ipsecpolicy.SetIpsecpolicy, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual('Updated ipsecpolicy: gator\n', self.stdout())
+        self.assertEqual('Updated ipsecpolicy: nameo\n', self.stdout())
 
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.LIST_URL,
                                body=self.LIST_ONE)
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
@@ -143,7 +143,7 @@ b8408dgd,croc,sha1,aes-128,group5
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())

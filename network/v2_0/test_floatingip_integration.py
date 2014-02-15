@@ -29,12 +29,12 @@ class TestFloatingIpIntegration(common.TestIntegrationBase):
    "floatingip":
    {
        "status": "ACTIVE",
-       "name": "gator",
+       "name": "nameo",
        "tenant_id": "33a40233",
        "id": "a9254bdb"
    }
 }"""
-    DELETE_URL = HOSTESS + "/floatingips/gator.json"
+    DELETE_URL = HOSTESS + "/floatingips/nameo.json"
     DELETE = "{}"
     LIST_URL = HOSTESS + "/floatingips.json"
     LIST_ONE = '{ "floatingips": [{ "id": "a9254bdb" }] }'
@@ -57,13 +57,13 @@ class TestFloatingIpIntegration(common.TestIntegrationBase):
        }
    ]
 }"""
-    SHOW_URL = HOSTESS + "/floatingips/gator.json"
+    SHOW_URL = HOSTESS + "/floatingips/nameo.json"
     SHOW = CREATE
 
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
-        pargs.name = 'gator'
+        pargs.name = 'nameo'
         pargs.floating_network_id = '123123'
         pargs.port_id = '7777899'
         pargs.fixed_ip_address = None
@@ -77,7 +77,7 @@ class TestFloatingIpIntegration(common.TestIntegrationBase):
         self.assertEqual(u"""\
 Created a new floatingip:
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
@@ -85,12 +85,12 @@ tenant_id="33a40233"
     @httpretty.activate
     def test_delete(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.DELETE, self.DELETE_URL,
                                body=self.DELETE)
         self.when_run(floatingip.DeleteFloatingIp, pargs)
         self.assertEqual('', self.stderr())
-        self.assertEqual(u'Deleted floatingip: gator\n',
+        self.assertEqual(u'Deleted floatingip: nameo\n',
                          self.stdout())
 
     @httpretty.activate
@@ -110,14 +110,14 @@ b8408dgd,10.1.1.2,15.1.1.3,8080808
     @httpretty.activate
     def test_show(self):
         pargs = common.FakeParsedArgs()
-        pargs.identifier = 'gator'
+        pargs.identifier = 'nameo'
         httpretty.register_uri(httpretty.GET, self.SHOW_URL,
                                body=self.SHOW)
         self.when_run(floatingip.ShowFloatingIp, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
 id="a9254bdb"
-name="gator"
+name="nameo"
 status="ACTIVE"
 tenant_id="33a40233"
 """, self.stdout())
