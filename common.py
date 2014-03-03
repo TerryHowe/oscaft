@@ -18,10 +18,12 @@ import httpretty
 import sys
 import traceback
 
+from cinderclient.v1 import client as cinder
 from openstackclient import shell
+from openstackclient.image import client as glance
 from openstackclient.tests import fakes
 from openstackclient.tests import utils
-from neutronclient.v2_0 import client
+from neutronclient.v2_0 import client as neutron
 
 
 class FakeOptions(argparse.Namespace):
@@ -37,7 +39,14 @@ class FakeOptions(argparse.Namespace):
         self.os_project_id = 'project_id'
         self.os_project_name = 'project_name'
         self.os_region_name = 'region_name'
+        self.os_domain_id = 'maindomain'
+        self.os_domain_name = 'maindomain'
+        self.os_user_domain_id = None
+        self.os_user_domain_name = None
+        self.os_project_domain_id = None
+        self.os_project_domain_name = None
         self.os_network_api_version = '2.0'
+        self.os_volume_api_version = '1'
         self.os_token = 'token'
         self.os_url = 'http://127.0.0.1'
         self.os_auth_url = 'http://127.0.0.1/identity'
@@ -60,7 +69,7 @@ class FakeParsedArgs(argparse.Namespace):
 class FakeShell(shell.OpenStackShell):
     def __init__(self):
         super(FakeShell, self).__init__()
-        self.options = { 'debug': False,
+        self.network_options = { 'debug': False,
                          'insecure': True,
                          'endpoint_url': 'http://127.0.0.1',
                          'region_name': 'region_x',
@@ -70,6 +79,15 @@ class FakeShell(shell.OpenStackShell):
                          'tenant_id': 'iddy',
                          'tenant_name': 'nameo',
                          'username': 'username'}
+        self.volume_options = {
+                         'insecure': True,
+                         'region_name': 'region_x',
+                         'auth_url': 'http://127.0.0.1/identity',
+                         'api_key': 'wasspord',
+                         'project_id': 'iddy',
+                         'username': 'username'}
+        self.image_options = { }
+        self.options = FakeOptions()
         try:
             self.initialize_app(["run.py", "help"])
         except Exception:
@@ -81,7 +99,11 @@ class FakeShell(shell.OpenStackShell):
         self.stdout = fakes.FakeStdout()
         self.stderr = fakes.FakeStdout()
         self.client_manager = fakes.FakeClientManager()
-        self.client_manager.network = client.Client(**self.options)
+        self.client_manager.network = neutron.Client(**self.network_options)
+        self.client_manager.volume = cinder.Client(**self.volume_options)
+        gclient = glance.Client_v1('http://127.0.0.1/',
+                                   **self.image_options)
+        self.client_manager.image = gclient
 
 
 class TestIntegrationBase(utils.TestCase):
