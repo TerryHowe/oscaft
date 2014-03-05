@@ -21,66 +21,42 @@ from openstackclient.tests.oscaft import common
 
 class TestImageIntegration(common.TestIntegrationBase):
     HOSTESS = common.TestIntegrationBase.HOST + '/v1'
-    CREATE_URL = HOSTESS + "/image"
-    CREATE = """
+    CREATE_VOLUME_URL = HOSTESS + "/volumes"
+    CREATE_IMAGE = """
+
 {
-   "image":
+   "os-volume_upload_image":
    {
-       "status": "ACTIVE",
+       "status": "uploading",
        "name": "nameo",
        "tenant_id": "33a40233",
-       "id": "a9254bdb"
+       "id": "a9254bdb",
+       "image_id": "b2348002"
    }
 }"""
-    SHOW_URL = HOSTESS + "/images/detail"
-    LIST_URL = HOSTESS + "/images"
-    LIST_ONE = """ { "images": [{ "id": "a9254bdb" }] }"""
-    LIST_TWO = """ { "images": [] }"""
-    LIST = """
-{
-   "images": [
-       {
-          "status": "ACTIVE",
-          "name": "nameo",
-          "tenant_id": "33a40233",
-          "id": "a9254bdb"
-       },
-       {
-          "status": "ACTIVE",
-          "name": "croc",
-          "tenant_id": "33a40233",
-          "id": "b8408dgd"
-       }
-   ]
-}"""
+    LIST_VOLUME_URL = HOSTESS + "/volumes"
+    SHOW_VOLUME_URL = HOSTESS + "/volumes/detail"
+    LIST_VOLUME = """{"volumes": [{"id": "a9254bdb", "name": "volly"}]}"""
+    ACTION_VOLUME_URL = HOSTESS + "/volumes/a9254bdb/action"
 
     @httpretty.activate
     def test_create(self):
         pargs = common.FakeParsedArgs()
         pargs.name = 'nameo'
-        pargs.admin_state = True
-        pargs.shared = True
-        pargs.tenant_id = '33a40233'
-        #httpretty.register_uri(httpretty.GET, self.LIST_URL,
-        #                       body="asdfasdfasdf", content_type="application/json")
-        httpretty.register_uri(httpretty.GET, unicode(self.SHOW_URL),
-                               responses=[
-                                    httpretty.Response("first response", status=201),
-                                    httpretty.Response(self.LIST, status=202),
-                                    httpretty.Response(self.LIST_TWO)], Streaming=True)
-        httpretty.register_uri(httpretty.POST, self.CREATE_URL,
-                               body=self.CREATE, content_type="text/json")
-        print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-        print self.LIST_URL
-        print self.SHOW_URL
-        print self.CREATE_URL
-        print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+        pargs.volume = 'volly'
+        pargs.force = False
+        pargs.container_format = 'bare'
+        pargs.disk_format = 'raw'
+        httpretty.register_uri(httpretty.GET, self.SHOW_VOLUME_URL,
+                               body=self.LIST_VOLUME)
+        httpretty.register_uri(httpretty.POST, self.ACTION_VOLUME_URL,
+                               body=self.CREATE_IMAGE)
         self.when_run(image.CreateImage, pargs)
         self.assertEqual('', self.stderr())
         self.assertEqual(u"""\
-Created a new image:
 id="a9254bdb"
+image_id="b2348002"
 name="nameo"
-status="ACTIVE"
+status="uploading"
 tenant_id="33a40233"
 """, self.stdout())

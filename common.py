@@ -23,7 +23,10 @@ from openstackclient import shell
 from openstackclient.image import client as glance
 from openstackclient.tests import fakes
 from openstackclient.tests import utils
-from neutronclient.v2_0 import client as neutron
+try: 
+    from neutronclient.v2_0 import client as neutron
+except:
+    neutron = None
 
 
 class FakeOptions(argparse.Namespace):
@@ -99,8 +102,11 @@ class FakeShell(shell.OpenStackShell):
         self.stdout = fakes.FakeStdout()
         self.stderr = fakes.FakeStdout()
         self.client_manager = fakes.FakeClientManager()
-        self.client_manager.network = neutron.Client(**self.network_options)
+        if neutron:
+            self.client_manager.network = neutron.Client(**self.network_options)
         self.client_manager.volume = cinder.Client(**self.volume_options)
+        self.client_manager.volume.client.management_url = 'http://127.0.0.1/v1'
+        self.client_manager.volume.client.auth_token = 'token'
         gclient = glance.Client_v1('http://127.0.0.1/',
                                    **self.image_options)
         self.client_manager.image = gclient
